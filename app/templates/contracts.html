@@ -1,0 +1,334 @@
+<!-- <!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Government Contracts</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href="/">GovContractAI</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h1 class="mt-4">Government Contracts</h1>
+      <form id="contracts-search-form" class="form-inline mb-3">
+        <input type="text" id="contracts-api-key" class="form-control mr-2" placeholder="API Key" required>
+        <input type="text" id="contracts-posted-from" class="form-control mr-2" placeholder="Posted From (MM/dd/yyyy)" required>
+        <input type="text" id="contracts-posted-to" class="form-control mr-2" placeholder="Posted To (MM/dd/yyyy)" required>
+        <input type="text" id="contracts-limit" class="form-control mr-2" placeholder="Limit" required>
+        <input type="text" id="contracts-offset" class="form-control mr-2" placeholder="Offset" required>
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+      <div id="contracts-results"></div>
+    </div>
+
+    <div class="footer">
+      <p>&copy; 2024 GovContractAI. All rights reserved.</p>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+      document.getElementById('contracts-search-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const apiKey = document.getElementById('contracts-api-key').value;
+        const postedFrom = document.getElementById('contracts-posted-from').value;
+        const postedTo = document.getElementById('contracts-posted-to').value;
+        const limit = document.getElementById('contracts-limit').value;
+        const offset = document.getElementById('contracts-offset').value;
+        fetch(`/api/search?api_key=${apiKey}&postedFrom=${postedFrom}&postedTo=${postedTo}&limit=${limit}&offset=${offset}`)
+          .then(response => response.json())
+          .then(data => {
+            const resultsContainer = document.getElementById('contracts-results');
+            resultsContainer.innerHTML = '';
+            if (data.error) {
+              resultsContainer.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+            } else {
+              data.forEach(item => {
+                const div = document.createElement('div');
+                div.textContent = JSON.stringify(item, null, 2);
+                resultsContainer.appendChild(div);
+              });
+            }
+          });
+      });
+    </script>
+  </body>
+</html> -->
+
+<!-- ################################
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Government Contracts</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href="/">GovContractAI</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h1 class="mt-4">Government Contracts</h1>
+      <form id="contracts-search-form" class="form-inline mb-3">
+        <input type="text" id="contracts-posted-from" class="form-control mr-2" placeholder="Posted From (MM/dd/yyyy)" required>
+        <input type="text" id="contracts-posted-to" class="form-control mr-2" placeholder="Posted To (MM/dd/yyyy)" required>
+        <input type="text" id="contracts-limit" class="form-control mr-2" placeholder="Limit" required>
+        <input type="text" id="contracts-offset" class="form-control mr-2" placeholder="Offset" required>
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+      <div id="contracts-results"></div>
+    </div>
+
+    <div class="footer">
+      <p>&copy; 2024 GovContractAI. All rights reserved.</p>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+      document.getElementById('contracts-search-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const postedFrom = document.getElementById('contracts-posted-from').value;
+        const postedTo = document.getElementById('contracts-posted-to').value;
+        const limit = document.getElementById('contracts-limit').value;
+        const offset = document.getElementById('contracts-offset').value;
+        fetch(`/api/search?postedFrom=${postedFrom}&postedTo=${postedTo}&limit=${limit}&offset=${offset}`)
+          .then(response => response.json())
+          .then(data => {
+            const resultsContainer = document.getElementById('contracts-results');
+            resultsContainer.innerHTML = '';
+            if (data.error) {
+              resultsContainer.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+            } else {
+              data.forEach(item => {
+                const div = document.createElement('div');
+                div.textContent = JSON.stringify(item, null, 2);
+                resultsContainer.appendChild(div);
+              });
+            }
+          });
+      });
+    </script>
+  </body>
+</html> -->
+
+<!-- #################################################WORKINGCODE -->
+<!-- <!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Government Contracts</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href="/">GovContractAI</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h1 class="mt-4">Government Contracts</h1>
+      <form id="contracts-search-form" class="form-inline mb-3">
+        <input type="text" id="contracts-posted-from" class="form-control mr-2" placeholder="Posted From (MM/dd/yyyy)" required>
+        <input type="text" id="contracts-posted-to" class="form-control mr-2" placeholder="Posted To (MM/dd/yyyy)" required>
+        <input type="text" id="contracts-State" class="form-control mr-2" placeholder="State" required>
+        <input type="text" id="contracts-ZipCode" class="form-control mr-2" placeholder="ZipCode" required>
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+      <div id="contracts-results" class="row"></div>
+    </div>
+
+    <div class="footer">
+      <p>&copy; 2024 GovContractAI. All rights reserved.</p>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+      document.getElementById('contracts-search-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const postedFrom = document.getElementById('contracts-posted-from').value;
+        const postedTo = document.getElementById('contracts-posted-to').value;
+        const state = document.getElementById('contracts-State').value;
+        const zip = document.getElementById('contracts-ZipCode').value;
+        fetch(`/api/search?postedFrom=${postedFrom}&postedTo=${postedTo}&state=${state}&zip=${zip}`)
+          .then(response => response.json())
+          .then(data => {
+            const resultsContainer = document.getElementById('contracts-results');
+            resultsContainer.innerHTML = '';
+            if (data.error) {
+              resultsContainer.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+            } else {
+              data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'col-md-4';
+                card.innerHTML = `
+                  <div class="card mb-4">
+                    <div class="card-body">
+                      <h5 class="card-title">${item.title}</h5>
+                      <h6 class="card-subtitle mb-2 text-muted">${item.solicitationNumber}</h6>
+                      <p class="card-text"><strong>Agency:</strong> ${item.fullParentPathName}</p>
+                      <p class="card-text"><strong>NAICS Code:</strong> ${item.naicsCode}</p>
+                      <p class="card-text"><strong>Posted Date:</strong> ${item.postedDate}</p>
+                      <p class="card-text"><strong>Response Deadline:</strong> ${item.responseDeadLine}</p>
+                      <a href="${item.uiLink}" class="card-link" target="_blank">View Details</a>
+                    </div>
+                  </div>
+                `;
+                resultsContainer.appendChild(card);
+              });
+            }
+          });
+      });
+    </script>
+  </body>
+</html> -->
+<!-- #####NEWTEST --> 
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Government Contracts</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href="/">GovContractAI</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h1 class="mt-4">Government Contracts</h1>
+      <form id="contracts-search-form" class="form-inline mb-3">
+        <input type="text" id="contracts-posted-from" class="form-control mr-2" placeholder="Posted From (MM/dd/yyyy)" required>
+        <input type="text" id="contracts-posted-to" class="form-control mr-2" placeholder="Posted To (MM/dd/yyyy)" required>
+        <input type="text" id="contracts-state" class="form-control mr-2" placeholder="State" required>
+        <input type="text" id="contracts-zip" class="form-control mr-2" placeholder="Zip Code" required>
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+      <div id="contracts-results" class="row"></div>
+    </div>
+
+    <div class="footer">
+      <p>&copy; 2024 GovContractAI. All rights reserved.</p>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+      document.getElementById('contracts-search-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const postedFrom = document.getElementById('contracts-posted-from').value;
+        const postedTo = document.getElementById('contracts-posted-to').value;
+        const state = document.getElementById('contracts-state').value;
+        const zip = document.getElementById('contracts-zip').value;
+
+        // Fetch data from API
+        fetch(`/api/search?postedFrom=${postedFrom}&postedTo=${postedTo}&state=${state}&zip=${zip}`)
+          .then(response => response.json())
+          .then(data => {
+            console.log(data); // Debugging line to inspect fetched data
+            const resultsContainer = document.getElementById('contracts-results');
+            resultsContainer.innerHTML = '';
+
+            // Handle errors in data
+            if (data.error) {
+              resultsContainer.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+            } else {
+              // Display each item in the results
+              data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'col-md-4';
+                card.innerHTML = `
+                  <div class="card mb-4">
+                    <div class="card-body">
+                      <h5 class="card-title">${item.title || 'No title available'}</h5>
+                      <h6 class="card-subtitle mb-2 text-muted">${item.solicitationNumber || 'N/A'}</h6>
+                      <p class="card-text"><strong>Agency:</strong> ${item.fullParentPathName || 'N/A'}</p>
+                      <p class="card-text"><strong>NAICS Code:</strong> ${item.naicsCode || 'N/A'}</p>
+                      <p class="card-text"><strong>Posted Date:</strong> ${item.postedDate || 'N/A'}</p>
+                      <p class="card-text"><strong>Response Deadline:</strong> ${item.responseDeadLine || 'N/A'}</p>
+                      <p class="card-text"><strong>Set-Aside:</strong> ${item.typeOfSetAsideDescription || 'N/A'}</p>
+                      <p class="card-text"><strong>Place of Performance:</strong> ${item.placeOfPerformance ? item.placeOfPerformance.city.name + ', ' + item.placeOfPerformance.state.name : 'N/A'}</p>
+                      <a href="${item.uiLink || '#'}" class="card-link" target="_blank">View Details</a>
+                    </div>
+                  </div>
+                `;
+                resultsContainer.appendChild(card);
+              });
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+            document.getElementById('contracts-results').innerHTML = `<div class="alert alert-danger">An error occurred while fetching the data.</div>`;
+          });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href="/">GovContractAI</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h1 class="mt-4">Dashboard</h1>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="pane">
+            <div class="pane-header">Government Contracts</div>
+            <div id="contracts-content"></div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="pane">
+            <div class="pane-header">AI Insights</div>
+            <div id="ai-insights-content"></div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="pane">
+            <div class="pane-header">Market Analysis</div>
+            <div id="market-analysis-content"></div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="pane">
+            <div class="pane-header">API Search Opportunities</div>
+            <form id="search-form" class="form-inline mb-3">
+              <input type="text" id="api-key" class="form-control mr-2" placeholder="API Key" required>
+              <input type="text" id="posted-from" class="form-control mr-2" placeholder="Posted From (MM/dd/yyyy)" required>
+              <input type="text" id="posted-to" class="form-control mr-2" placeholder="Posted To (MM/dd/yyyy)" required>
+              <input type="text" id="limit" class="form-control mr-2" placeholder="Limit" required>
+              <input type="text" id="offset" class="form-control mr-2" placeholder="Offset" required>
+              <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            <div id="search-results"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>&copy; 2024 GovContractAI. All rights reserved.</p>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+      document.getElementById('search-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const apiKey = document.getElementById('api-key').value;
+        const postedFrom = document.getElementById('posted-from').value;
+        const postedTo = document.getElementById('posted-to').value;
+        const limit = document.getElementById('limit').value;
+        const offset = document.getElementById('offset').value;
+        fetch(`/api/search?api_key=${apiKey}&postedFrom=${postedFrom}&postedTo=${postedTo}&limit=${limit}&offset=${offset}`)
+          .then(response => response.json())
+          .then(data => {
+            const resultsContainer = document.getElementById('search-results');
+            const contractsContainer = document.getElementById('contracts-content');
+            resultsContainer.innerHTML = '';
+            contractsContainer.innerHTML = '';
+            if (data.error) {
+              resultsContainer.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+            } else {
+              data.forEach(item => {
+                const div = document.createElement('div');
+                div.textContent = JSON.stringify(item, null, 2);
+                resultsContainer.appendChild(div);
+                contractsContainer.appendChild(div.cloneNode(true));
+              });
+            }
+          });
+      });
+    </script>
+  </body>
+</html>
