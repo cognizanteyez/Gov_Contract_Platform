@@ -2,6 +2,10 @@
 
 > **Project status:** Prototype / learning project. This repository is a technical artifact, not a production-ready procurement, contracting, security, or decision-making system.
 
+![Illustrative Government Contract Opportunity Platform prototype interface](government-contract-opportunity-platform-prototype-interface.png)
+
+*Illustrative prototype interface. The displayed opportunities, counts, agencies, NAICS codes, match scores, dates, activity indicators, and filters are sample visualization content only. This is not a production procurement platform, live opportunity feed, or a substitute for official government sources, contracting guidance, or legal advice.*
+
 ## Overview
 
 This Flask-based prototype explores an authenticated workflow for discovering public government-contract opportunities. It combines a basic account flow, protected dashboard and contracts views, and a server-side search endpoint intended to query public opportunity data from SAM.gov.
