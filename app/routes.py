@@ -45,7 +45,7 @@
 #         search_results = response.json().get('opportunitiesData', [])
 #     else:
 #         search_results = [{"error": f"Failed to fetch data from API. Status code: {response.status_code}. {response.text}"}]
-    
+
 #     return jsonify(search_results)
 
 # def get_ai_insights():
@@ -62,35 +62,50 @@ import requests
 
 main_bp = Blueprint('main', __name__)
 
+
 @main_bp.route('/')
 def index():
     return render_template('index.html')
+
 
 @main_bp.route('/dashboard')
 @login_required
 def dashboard():
     return render_template('dashboard.html')
 
+
 @main_bp.route('/contracts')
 @login_required
 def contracts():
     return render_template('contracts.html')
 
+
 @main_bp.route('/api/search', methods=['GET'])
 def api_search():
-    api_key = current_app.config['SAM_API_KEY']
+    api_key = current_app.config.get('SAM_API_KEY')
+    if not api_key:
+        return jsonify({"error": "Server configuration requires SAM_API_KEY."}), 503
+
     posted_from = request.args.get('postedFrom')
     posted_to = request.args.get('postedTo')
     state = request.args.get('state')
-    zip = request.args.get('zip')
+    zip_code = request.args.get('zip')
 
-    url = f'https://api.sam.gov/opportunities/v2/search?api_key={api_key}&postedFrom={posted_from}&postedTo={posted_to}&state={state}&zip={zip}'
+    url = (
+        'https://api.sam.gov/opportunities/v2/search?'
+        f'api_key={api_key}&postedFrom={posted_from}&postedTo={posted_to}'
+        f'&state={state}&zip={zip_code}'
+    )
     response = requests.get(url)
 
     if response.status_code == 200:
         search_results = response.json().get('opportunitiesData', [])
     else:
-        search_results = [{"error": f"Failed to fetch data from API. Status code: {response.status_code}. {response.text}"}]
-    print("\n \n \n Search_Results:", search_results)
+        search_results = [{
+            "error": (
+                "Failed to fetch data from API. "
+                f"Status code: {response.status_code}. {response.text}"
+            )
+        }]
+
     return jsonify(search_results)
-# api_search()
